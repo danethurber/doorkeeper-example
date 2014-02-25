@@ -1,0 +1,34 @@
+*.rbc
+*.sassc
+.sass-cache
+capybara-*.html
+.rspec
+/log
+/tmp
+/db/*.sqlite3
+/public/system
+/coverage/
+/spec/tmp
+**.orig
+rerun.txt
+pickle-email-*.html
+
+# unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
+.rvmrc
+
+## Environment normalisation:
+/.bundle
+/vendor/bundle
+
+## configuration
+config/initializers/secret_token.rb
+config/secrets.yml
+config/database.yml
+
+## node
+node_modules
+
+## assets
+app/assets/components
+vendor/assets/components
+public/assets
