@@ -1,10 +1,5 @@
-<a class="connect">connect</a>
-<p class="token">token: </p>
-
 <script type="text/javascript">
   $(function () {
-    $('.connect, .token').hide()
-
     var extractToken = function(hash) {
       var match = hash.match(/access_token=([\w-]+)/);
       return !!match && match[1];
@@ -16,13 +11,13 @@
     var token = extractToken(document.location.hash);
 
     if (token) {
-      $('.token').append(token).show();
+      $('body').append("<p>token: </p>").find('p').append(token);
     } else {
       var authUrl = '/oauth/authorize?response_type=token' +
         '&client_id='    + OAUTH_ID +
         '&redirect_uri=' + OAUTH_CB_URL;
 
-      $('.connect').attr('href', authUrl).show();
+      window.location = authUrl;
     }
   });
 </script>
