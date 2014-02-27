@@ -11,6 +11,7 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'jquery-rails'
 
 gem 'bcrypt-ruby', '~> 3.1.2'
+gem 'doorkeeper'
 
 group :development, :test do
   gem 'dotenv-rails'

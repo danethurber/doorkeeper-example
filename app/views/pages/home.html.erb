@@ -1,0 +1,28 @@
+<a class="connect">connect</a>
+<p class="token">token: </p>
+
+<script type="text/javascript">
+  $(function () {
+    $('.connect, .token').hide()
+
+    var extractToken = function(hash) {
+      var match = hash.match(/access_token=([\w-]+)/);
+      return !!match && match[1];
+    };
+
+    var OAUTH_ID = '25c6d948dac33768a8593d4691a60b7d91aef047742e4e348d4f217981fb176a';
+    var OAUTH_CB_URL = 'http://localhost:3000/';
+
+    var token = extractToken(document.location.hash);
+
+    if (token) {
+      $('.token').append(token).show();
+    } else {
+      var authUrl = '/oauth/authorize?response_type=token' +
+        '&client_id='    + OAUTH_ID +
+        '&redirect_uri=' + OAUTH_CB_URL;
+
+      $('.connect').attr('href', authUrl).show();
+    }
+  });
+</script>

@@ -18,7 +18,6 @@ class User < ActiveRecord::Base
 
   before_validation :downcase_email!, :strip_email!
 
-
   validates :email, presence: true,
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
