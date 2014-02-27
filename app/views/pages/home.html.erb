@@ -27,10 +27,11 @@
 
       getAccountData().then(function(data){
         div = $('body').append("<div />")
+        user = data.user
 
-        Object.keys(data).forEach(function(key){
+        Object.keys(user).forEach(function(key){
           var p = div.append('<p />');
-          var value = data[key];
+          var value = user[key];
           p.append(key + ': ' + value);
         });
       });

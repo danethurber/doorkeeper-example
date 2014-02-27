@@ -13,6 +13,8 @@ gem 'jquery-rails'
 gem 'bcrypt-ruby', '~> 3.1.2'
 gem 'doorkeeper'
 
+gem 'active_model_serializers'
+
 group :development, :test do
   gem 'dotenv-rails'
   gem 'debugger'
