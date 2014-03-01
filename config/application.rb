@@ -32,5 +32,9 @@ module MyBootstrap
       generate.view_specs false
       generate.test_framework false
     end
+
+    # OAUTH credentials
+    config.oauth_id     = ENV['OAUTH_ID'] || ''
+    config.oauth_cb_url = ENV['OAUTH_CB_URL'] || ''
   end
 end

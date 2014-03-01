@@ -15,8 +15,8 @@
       return deferred.promise();
     }
 
-    var OAUTH_ID = 'f75653a5a1c412645213836ea2ae1f2ff439b14be8b342a2a9f4b9de73c9704c';
-    var OAUTH_CB_URL = 'http://localhost:3000/';
+    var OAUTH_ID = '<%= Rails.application.config.oauth_id %>';
+    var OAUTH_CB_URL = '<%= Rails.application.config.oauth_cb_url %>';
 
     var token = extractToken(document.location.hash);
 
