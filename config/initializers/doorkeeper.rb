@@ -8,6 +8,16 @@ Doorkeeper.configure do
     User.find_by_id(session[:user_id]) || redirect_to(login_url)
   end
 
+  # Resource Owner Password Credentials Grant
+  #
+  # example POST '/oauth/token?grant_type=password&client_id=NUMBER&email=EMAIL&password=PASS'
+  # respone { "access_token":"12345","token_type":"bearer","expires_in":12345  }
+  #
+  resource_owner_from_credentials do
+    user = User.find_by_email(params[:email].downcase)
+    user.authenticate(params[:password]) unless user.nil?
+  end
+
   # If you want to restrict access to the web interface for adding oauth authorized applications, you need to declare the block below.
   # admin_authenticator do
   #   # Put your admin authentication logic here.
