@@ -33,6 +33,8 @@ module MyBootstrap
       generate.test_framework false
     end
 
+    config.assets.paths << Rails.root.join('vendor', 'assets', 'components')
+
     # OAUTH credentials
     config.oauth_id     = ENV['OAUTH_ID'] || ''
     config.oauth_cb_url = ENV['OAUTH_CB_URL'] || ''

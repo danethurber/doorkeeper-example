@@ -1,0 +1,21 @@
+{
+  "name": "doorkeeper-example",
+  "version": "0.0.0",
+  "description": "== README",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "node_modules/bower/bin/bower install -f"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/danethurber/doorkeeper-example.git"
+  },
+  "author": "",
+  "license": "BSD",
+  "readmeFilename": "README.rdoc",
+  "gitHead": "383f9d7c0481b99d359762613d549b0d099cdc8b",
+  "dependencies": {
+    "bower": "~1.2.8"
+  }
+}

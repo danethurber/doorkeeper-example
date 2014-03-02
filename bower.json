@@ -1,0 +1,20 @@
+{
+  "name": "doorkeeper-example",
+  "version": "0.0.0",
+  "homepage": "https://github.com/danethurber/doorkeeper-example",
+  "authors": [
+    "Dane Thurber <dane.thurber@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.2.14"
+  }
+}
