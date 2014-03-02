@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+  layout 'sessions'
+
   def new
     session[:return_to] = params[:return_to] if params[:return_to]
   end
