@@ -13,4 +13,5 @@ MyBootstrap::Application.routes.draw do
   match '/logout', to: 'sessions#destroy', via: [:delete, :get]
 
   root to: 'pages#home'
+  get '/auth/callback', to: 'pages#home'
 end

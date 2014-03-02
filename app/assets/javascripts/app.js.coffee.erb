@@ -1,0 +1,71 @@
+angular.module 'app', ['ui.router']
+
+angular.module('app').config ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider) ->
+
+  $urlRouterProvider.otherwise '/'
+  $locationProvider.html5Mode true
+
+  $stateProvider
+    .state 'home',
+      url: '/'
+
+      template: """
+        <p>{{currentUser}}</p>
+      """
+
+      controller: ($scope, currentUser, $http, auth) ->
+        $scope.currentUser = currentUser
+
+      resolve:
+        currentUser: ($q, $http, auth) ->
+          deferred = $q.defer()
+
+          if auth.token()
+            $http.get('/api/v1').then (res) ->
+              userPath = res.data?.account?.href
+
+              if userPath?
+                $http.get(userPath)
+                  .then (res)-> res.data.user
+                  .then deferred.resolve
+              else
+                auth.redirectToLogin()
+          else
+            auth.redirectToLogin()
+
+          deferred.promise
+
+    .state 'authCallback',
+      url: '/auth/callback'
+
+      template: ''
+
+      controller: (auth, $location, $http, $state) ->
+        # this is the way it should work
+        # auth.token $location.search().access_token
+
+        auth.token $location.hash().match(/access_token=([\w-]+)/)[1]
+        $http.defaults.headers.common['Authorization'] = "Bearer #{auth.token()}"
+
+        $state.transitionTo 'home'
+
+  $httpProvider.interceptors.push ($window, $q, auth) ->
+    responseError: (rejection) ->
+      auth.redirectToLogin() if rejection.status is 401
+      $q.reject rejection
+
+angular.module('app').factory 'auth', ($window) ->
+  OAUTH_ID = '<%= Rails.application.config.oauth_id %>'
+  OAUTH_CB_URL = '<%= Rails.application.config.oauth_cb_url %>'
+
+  access_token = null
+
+  buildAuthUrl = () ->
+    "/oauth/authorize?response_type=token&client_id=#{OAUTH_ID}&redirect_uri=#{OAUTH_CB_URL}"
+
+  redirectToLogin: () ->
+    $window.location.href = buildAuthUrl()
+
+  token: (token=null) ->
+    access_token = token if token?
+    access_token
