@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="app">
 <head>
   <title>MyBootstrap</title>
   <%= stylesheet_link_tag    "application", media: "all" %>
@@ -8,11 +8,7 @@
 </head>
 <body>
 
-<% if flash[:error] %>
-  <%= flash[:error] %>
-<% end %>
-
-<%= yield %>
+  <div ui-view></div>
 
 </body>
 </html>
