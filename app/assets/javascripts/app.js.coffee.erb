@@ -11,6 +11,7 @@ angular.module('app').config ($stateProvider, $urlRouterProvider, $httpProvider,
 
       template: """
         <p>{{currentUser}}</p>
+        <p><a ui-sref="logout">logout</a></p>
       """
 
       controller: ($scope, currentUser, $http, auth) ->
@@ -21,6 +22,7 @@ angular.module('app').config ($stateProvider, $urlRouterProvider, $httpProvider,
           deferred = $q.defer()
 
           if auth.token()
+
             $http.get('/api/v1').then (res) ->
               userPath = res.data?.account?.href
 
@@ -29,9 +31,9 @@ angular.module('app').config ($stateProvider, $urlRouterProvider, $httpProvider,
                   .then (res)-> res.data.user
                   .then deferred.resolve
               else
-                auth.redirectToLogin()
+                auth.login()
           else
-            auth.redirectToLogin()
+            auth.login()
 
           deferred.promise
 
@@ -41,31 +43,41 @@ angular.module('app').config ($stateProvider, $urlRouterProvider, $httpProvider,
       template: ''
 
       controller: (auth, $location, $http, $state) ->
-        # this is the way it should work
-        # auth.token $location.search().access_token
-
         auth.token $location.hash().match(/access_token=([\w-]+)/)[1]
-        $http.defaults.headers.common['Authorization'] = "Bearer #{auth.token()}"
 
         $state.transitionTo 'home'
 
+    .state 'logout',
+      url: '/auth/logout'
+      template: ''
+      controller: (auth) ->
+        auth.logout()
+
+
   $httpProvider.interceptors.push ($window, $q, auth) ->
     responseError: (rejection) ->
-      auth.redirectToLogin() if rejection.status is 401
+      auth.login() if rejection.status is 401
       $q.reject rejection
+
+    request: ($config) ->
+      $config.headers['Authorization'] = "Bearer #{auth.token()}" if auth.token()
+      $config
 
 angular.module('app').factory 'auth', ($window) ->
   OAUTH_ID = '<%= Rails.application.config.oauth_id %>'
   OAUTH_CB_URL = '<%= Rails.application.config.oauth_cb_url %>'
 
-  access_token = null
-
   buildAuthUrl = () ->
     "/oauth/authorize?response_type=token&client_id=#{OAUTH_ID}&redirect_uri=#{OAUTH_CB_URL}"
 
-  redirectToLogin: () ->
+  login: () ->
     $window.location.href = buildAuthUrl()
 
+  logout: () ->
+    delete localStorage['access_token']
+    $window.location.href = '/logout'
+
   token: (token=null) ->
-    access_token = token if token?
-    access_token
+    localStorage.setItem('access_token', token) if token?
+
+    localStorage['access_token']
