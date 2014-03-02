@@ -31,32 +31,27 @@ angular.module('app').config ($stateProvider, $urlRouterProvider, $httpProvider,
                   .then (res)-> res.data.user
                   .then deferred.resolve
               else
-                auth.login()
+                auth.redirectToLogin()
           else
-            auth.login()
+            auth.redirectToLogin()
 
           deferred.promise
 
     .state 'authCallback',
       url: '/auth/callback'
-
-      template: ''
-
       controller: (auth, $location, $http, $state) ->
         auth.token $location.hash().match(/access_token=([\w-]+)/)[1]
-
         $state.transitionTo 'home'
 
     .state 'logout',
       url: '/auth/logout'
-      template: ''
       controller: (auth) ->
         auth.logout()
 
 
   $httpProvider.interceptors.push ($window, $q, auth) ->
     responseError: (rejection) ->
-      auth.login() if rejection.status is 401
+      auth.redirectToLogin() if rejection.status is 401
       $q.reject rejection
 
     request: ($config) ->
@@ -70,7 +65,7 @@ angular.module('app').factory 'auth', ($window) ->
   buildAuthUrl = () ->
     "/oauth/authorize?response_type=token&client_id=#{OAUTH_ID}&redirect_uri=#{OAUTH_CB_URL}"
 
-  login: () ->
+  redirectToLogin: () ->
     $window.location.href = buildAuthUrl()
 
   logout: () ->
